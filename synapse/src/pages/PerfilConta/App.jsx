@@ -1,24 +1,19 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Sidebar from "../../components/Sidebar"
-import SideChat from "../../components/Sideia"
-import PerfilConta from "./Perfilconta"
+import { Link } from "react-router-dom"
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<h1>Home Page</h1>} />
-            <Route path="/dados" element={<h1>Dados</h1>} />
-            <Route path="/perfilconta" element={<PerfilConta />} />
-            <Route path="/metricas" element={<h1>Métricas</h1>} />
-          </Routes>
-        </main>
-        <SideChat />
-      </div>
-    </BrowserRouter>
+    <div className="flex min-h-screen">
+            <Sidebar />
+              <main className="flex-1">
+               <nav className="flex gap-4 p-4 bg-slate-900 text-slate-100">
+                  <Link to="/dados">Dados</Link>
+                  <Link to="/perfilconta">Perfil</Link>
+                  <Link to="/metricas">Métricas</Link>
+                  <Link to="/educacional">Educacional</Link>
+                </nav>
+              </main>
+            <SideChat />
+          </div>
   )
 }
 
