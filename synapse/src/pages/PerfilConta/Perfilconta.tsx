@@ -26,8 +26,8 @@ function Perfilconta() {
                                 <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
                                         <h2 className="mb-3 text-lg font-semibold">Dados do usuario</h2>
                                         <div className="grid gap-3 md:grid-cols-2">
-                                                <input type="text" defaultValue="Rodrigo Souza" className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none placeholder:text-slate-500" />
-                                                <input type="email" defaultValue="rodrigo@email.com" className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none placeholder:text-slate-500" />
+                                                <input type="text" defaultValue="" className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none placeholder:text-slate-500" />
+                                                <input type="email" defaultValue="" className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none placeholder:text-slate-500" />
                                         </div>
                                 </div>
 
