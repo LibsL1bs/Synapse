@@ -13,6 +13,7 @@ function Home() {
                 <p className="text-slate-400 text-xl max-w-xl">
                     Sua plataforma de powerlifting inteligente. Acompanhe sua evolução, analise seus dados e quebre recordes.
                 </p>
+                //! navigate de login e cadastro que fica no meio da tela (nn funciona pq ainda nn existe)
                 <div className="flex gap-4 mt-4">
                     <button onClick={() => navigate("/login")} className="px-6 py-2 rounded-lg bg-cyan-500 text-slate-950 font-semibold hover:bg-cyan-400 transition-colors">
                         Entrar
@@ -70,6 +71,7 @@ function Home() {
             <section className="flex flex-col items-center gap-4 py-20 border-t border-slate-800 px-6 text-center">
                 <h2 className="text-3xl font-bold">Pronto para quebrar seus recordes?</h2>
                 <p className="text-slate-400">Crie sua conta gratuitamente e comece hoje.</p>
+                //! navigate de cadastro mais abaixo (nn funciona pq ainda nn existe)
                 <button onClick={() => navigate("/cadastro")} className="mt-4 px-8 py-3 rounded-lg bg-cyan-500 text-slate-950 font-semibold hover:bg-cyan-400 transition-colors text-lg">
                     Começar agora
                 </button>
