@@ -1,15 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Home from "./Home"
+import { Link } from "react-router-dom"
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<h1>Login</h1>} />
-        <Route path="/cadastro" element={<h1>Cadastro</h1>} />
-      </Routes>
-    </BrowserRouter>
+    <nav className="flex gap-4 p-4 bg-slate-900 text-slate-100">
+      <Link to="/">Home</Link>
+      <Link to="/login">Login (pendente)</Link>
+      <Link to="/cadastro">Cadastro (pendente)</Link>
+    </nav>
   )
 }
 

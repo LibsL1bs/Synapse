@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
+//! qualquer navigate que não seja de perfilconta, não existe realmente.
+
 function Home() {
     const navigate = useNavigate()
 
@@ -80,7 +82,5 @@ function Home() {
         </div>
     )
 }
-
-export default Home
 
 export default Home
