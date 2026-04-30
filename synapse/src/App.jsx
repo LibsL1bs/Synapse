@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Sidebar from "../../components/Sidebar"
-import SideChat from "../../components/Sideia"
-import PerfilConta from "./Perfilconta"
+import Sidebar from "./components/Sidebar"
+import SideChat from "./components/Sideia"
+import PerfilConta from "./pages/PerfilConta/Perfilconta"
 
 function App() {
   return (
@@ -10,7 +10,9 @@ function App() {
         <Sidebar />
         <main className="flex-1">
           <Routes>
+            <Route path="/dados" element={<h1>Dados</h1>} />
             <Route path="/perfilconta" element={<PerfilConta />} />
+            <Route path="/metricas" element={<h1>Métricas</h1>} />
           </Routes>
         </main>
         <SideChat />
