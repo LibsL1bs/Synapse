@@ -1,9 +1,10 @@
-export default function BotaoLogin() {
+export default function BotaoLogin({ onClick }) {
     return (
         <button
-            className="w-full bg-white text-black py-2 rounded-md 
-      font-semibold tracking-wide 
-      hover:bg-gray-300 active:scale-95 
+            onClick={onClick}
+            className="w-full rounded-lg bg-cyan-500 text-slate-950 py-2.5
+      font-semibold tracking-wide
+      hover:bg-cyan-400 active:scale-95
       transition duration-200"
         >
             INICIAR SESSÃO

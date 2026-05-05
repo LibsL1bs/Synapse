@@ -1,29 +1,24 @@
-import BotaoLogin from "../src/Components/Login/MeuButton/Button";
-import Email from "../src/Components/Login/MeusInputs/Email";
-import Senha from "../src/Components/Login/MeusInputs/Senha";
-import Sessao from "../src/Components/Login/Text/IniciarSessao";
-import LogoSynapse from "../src/Components/Login/Text/LogoSynapse";
-import Subtitulo from "../src/Components/Login/Text/Subtitulo";
+import BotaoLogin from "../../components/Login/MeuButton/Button";
+import Email from "../../components/Login/MeusInputs/Email";
+import Senha from "../../components/Login/MeusInputs/Senha";
+import Sessao from "../../components/Login/Text/IniciarSessao";
+import LogoSynapse from "../../components/Login/Text/LogoSynapse";
+import Subtitulo from "../../components/Login/Text/Subtitulo";
 
 import { useState } from "react";
-
-
-import { Link } from 'react-router-dom';
-
-
 
 function App() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [msg, setMsg] = useState('teste');
-    console.log(msg);
+    const [msg, setMsg] = useState('');
 
     function trocar() {
-        email == '' || senha == ''
+        email === '' || senha === ''
             ? setMsg("Preencha todos os campos")
             : cadastrar()
     }
+
     async function cadastrar() {
         fetch('http://192.168.1.41:3000/cadastro', {
             method: 'POST',
@@ -31,49 +26,40 @@ function App() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                nome: name,
+                email: email,
                 senha: senha
             })
         })
-
     }
 
     return (
         <>
-
-            <main className="flex justify-center items-center min-h-screen bg-black">
-                <div className="flex flex-col items-center">
+            <main className="flex justify-center items-center min-h-screen bg-slate-950 text-slate-100">
+                <div className="flex flex-col items-center w-full max-w-md px-6">
                     <LogoSynapse />
                     <Sessao />
                     <Subtitulo />
 
-                    <article className=" gap-10 flex flex-col w-full max-w-md">
-                        <Email />
+                    <div className="w-full mt-8 rounded-xl border border-slate-800 bg-slate-900 p-8">
+                        <article className="flex flex-col gap-5 w-full">
+                            <Email value={email} onChange={(e) => setEmail(e.target.value)} />
 
-                        <label className="text-gray-300 text-sm">Senha</label>
+                            <Senha value={senha} onChange={(e) => setSenha(e.target.value)} />
 
-                        <Senha 
-                            placeholder="Coloque sua senha..."
-                            className="bg-gray-900 text-white px-4 py-2 rounded-md 
-        border border-gray-700 
-        focus:outline-none focus:ring-2 focus:ring-blue-500 
-        transition"
-                        />
+                            {msg ? <p className="text-red-400 text-sm text-center">{msg}</p> : null}
 
+                            <BotaoLogin onClick={trocar} />
+                        </article>
+                    </div>
 
-                        <BotaoLogin />
-                    </article>
-
-                    <p className="text-gray-400 text-sm mt-6">
-                        Sem conta?
-                        <span className="text-white cursor-pointer hover:underline">
+                    <p className="text-slate-400 text-sm mt-6">
+                        Sem conta?{" "}
+                        <span className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold">
                             CRIAR CONTA
                         </span>
                     </p>
-
                 </div>
             </main>
-
         </>
     );
 

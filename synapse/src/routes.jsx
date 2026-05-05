@@ -4,6 +4,7 @@ import SideChat from "./components/Sideia"
 import Home from "./pages/Homepage/Home"
 import PerfilConta from "./pages/PerfilConta/Perfilconta"
 import App from "./App"
+import Login from "./pages/LoginConta/App"
 
 function DashboardLayout({ children }) { // isso é um layout que vai ser usado nas páginas do dashboard, pra ter a sidebar e o chat sempre presentes
   return (
@@ -20,6 +21,7 @@ function AppRoutes() { // isso daqui serve paradefinir as rotas da aplicação, 
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<App />} />
         <Route path="/perfilconta" element={<DashboardLayout><PerfilConta /></DashboardLayout>} />
       </Routes>
