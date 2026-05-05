@@ -24,11 +24,11 @@ function App() {
 
     async function login() {
         try {
-            await axios.post('http://192.168.1.33:3000/auth/login', {
+            await axios.post('http://192.168.1.33:3001/auth/login', {
                 email: email,
                 password: senha
             });
-            navigate('/dashboard');
+            alert("Login bem-sucedido!");
         } catch (err) {
             if (err.response) {
                 setMsg("Email ou senha incorretos");

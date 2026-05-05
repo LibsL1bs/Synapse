@@ -1,12 +1,8 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import sql from "./database.js";
-import { issueAccessSession } from "./authSession.js";
 import requireAdminAuth from "./middlewares/requireAdminAuth.js";
-import requireAuth from "./middlewares/requireAuth.js";
-import { carregarDashboardEstado } from "./middlewares/load_state.js";
-import { edit_memory } from "./middlewares/memory_tree.js";
-import { executar_com_usuario } from "./chatbotv4.js";
+
 
 const routes = express.Router();
 const BCRYPT_ROUNDS = 10;
@@ -26,7 +22,7 @@ const comparePassword = async (password, storedPassword) => {
 };
 
 //===================================================================================================
-//------------------------------------ USUARIOS - ADMIN  lista todos os usuários---------------------------------------------
+//------------------------------------ USUARIOS - ADMIN ---------------------------------------------
 //===================================================================================================
 
 routes.get("/users", requireAdminAuth, async (req, res) => {
@@ -144,7 +140,7 @@ routes.delete("/users/:id", requireAdminAuth, async (req, res) => {
 
 
 //===================================================================================================
-//------------------------------------ USUARIOS - PUBLIC login e cadastro-------------------------------------------
+//------------------------------------ USUARIOS - PUBLIC -------------------------------------------
 //===================================================================================================
 
 routes.post("/auth/login", async (req, res) => {
@@ -172,6 +168,10 @@ routes.post("/auth/login", async (req, res) => {
       console.warn(`[AUTH][LOGIN][401] credenciais inválidas found=${rows.length}`);
       return res.status(401).json({ error: "Credenciais inválidas." });
     }
+
+    console.log(`[AUTH][LOGIN][200] login bem-sucedido for email=${email}`);
+    return res.status(200).json({ message: "Login bem-sucedido!" });
+
   } catch (error) {
     console.error("[AUTH][LOGIN][500] erro interno:", error);
     return res.status(500).json({ error: "Erro interno do servidor" });
