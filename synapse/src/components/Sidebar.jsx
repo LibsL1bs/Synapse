@@ -9,8 +9,14 @@ function Sidebar() {
       <NavLink to="/perfilconta">Perfil</NavLink>
       <NavLink to="/metricas">Métricas</NavLink>
       <NavLink to="/educacional">Educacional</NavLink>
+
+      {condition && (
+        
+      )}
     </aside>
   )
 }
+
+
 
 export default Sidebar
