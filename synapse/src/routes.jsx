@@ -15,7 +15,7 @@ function DashboardLayout({ children }) { // isso é um layout que vai ser usado 
   )
 }
 
-function AppRoutes() {
+function AppRoutes() { // isso daqui serve paradefinir as rotas da aplicação, as rotas que vão aparecer são as paginas home, dashboard e perfilconta, a home é a página de login, o dashboard é a página principal do usuário logado e o perfilconta é a página de configuração da conta do usuário, todas as páginas do dashboard vão usar o layout do dashboard, que tem a sidebar e o chat sempre presentes
   return (
     <BrowserRouter>
       <Routes>
