@@ -13,7 +13,6 @@ function Home() {
                 <p className="text-slate-400 text-xl max-w-xl">
                     Sua plataforma de powerlifting inteligente. Acompanhe sua evolução, analise seus dados e quebre recordes.
                 </p>
-                //! navigate de login e cadastro que fica no meio da tela (nn funciona pq ainda nn existe)
                 <div className="flex gap-4 mt-4">
                     <button onClick={() => navigate("/login")} className="px-6 py-2 rounded-lg bg-cyan-500 text-slate-950 font-semibold hover:bg-cyan-400 transition-colors">
                         Entrar

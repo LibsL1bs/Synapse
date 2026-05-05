@@ -6,30 +6,36 @@ import LogoSynapse from "../../components/Login/Text/LogoSynapse";
 import Subtitulo from "../../components/Login/Text/Subtitulo";
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function App() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [msg, setMsg] = useState('');
+    const navigate = useNavigate();
 
     function trocar() {
         email === '' || senha === ''
             ? setMsg("Preencha todos os campos")
-            : cadastrar()
+            : login()
     }
 
-    async function cadastrar() {
-        fetch('http://192.168.1.41:3000/cadastro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+    async function login() {
+        try {
+            await axios.post('http://192.168.1.33:3000/auth/login', {
                 email: email,
-                senha: senha
-            })
-        })
+                password: senha
+            });
+            navigate('/dashboard');
+        } catch (err) {
+            if (err.response) {
+                setMsg("Email ou senha incorretos");
+            } else {
+                setMsg("Erro ao conectar com o servidor");
+            }
+        }
     }
 
     return (
@@ -54,7 +60,10 @@ function App() {
 
                     <p className="text-slate-400 text-sm mt-6">
                         Sem conta?{" "}
-                        <span className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold">
+                        <span
+                            onClick={() => navigate('/cadastro')}
+                            className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold"
+                        >
                             CRIAR CONTA
                         </span>
                     </p>
