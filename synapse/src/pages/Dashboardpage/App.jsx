@@ -1,6 +1,7 @@
 import Readines from "../../components/Dashboard/Readines";
 import Fadiga from "../../components/Dashboard/Fadiga";
 import Tendencias from "../../components/Dashboard/Tendencias";
+import Sono from "../../components/Dashboard/Sono";
 
 function Dashboard() {
     return (
@@ -8,6 +9,7 @@ function Dashboard() {
             <Readines />
             <Fadiga />
             <Tendencias />
+            <Sono />
         </div>
     );
 }
