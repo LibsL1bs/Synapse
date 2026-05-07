@@ -1,11 +1,9 @@
-function Tendencias({ dados = [] }) {
+function Tendencias({dados = []}) {
     const hasDados = Array.isArray(dados) && dados.length > 0;
 
     return (
         <div className="w-full max-w-65 p-4 bg-slate-800 rounded-2xl">
-            <div className="text-xs font-bold uppercase tracking-widest text-slate-100 mb-4">
-                TENDÊNCIA
-            </div>
+            <div className="text-xs font-bold uppercase tracking-widest text-slate-100 mb-4">TENDÊNCIA</div>
 
             <div className="flex flex-col gap-1 text-xs text-slate-400 mb-4">
                 <div className="flex justify-between">
