@@ -25,7 +25,7 @@ function Readines() {
     const point = (radius, angle) => polarToCartesian(center, center, radius, angle);
 
     return (
-        <div className="w-full max-w-sm mx-auto p-4">
+        <div className="w-full max-w-65 p-2">
             <svg
                 viewBox={`0 0 ${size} ${size}`}
                 className="w-full h-auto"
