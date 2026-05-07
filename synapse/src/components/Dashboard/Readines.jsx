@@ -1,19 +1,19 @@
-function polarToCartesian(cx, cy, radius, angleDeg) {
-    const angleRad = (angleDeg * Math.PI) / 180;
+function polarParaXY(cx, cy, raio, grau) {
+    const rad = (grau * Math.PI) / 180;
     return {
-        x: cx + radius * Math.cos(angleRad),
-        y: cy + radius * Math.sin(angleRad),
+        x: cx + raio * Math.cos(rad),
+        y: cy + raio * Math.sin(rad),
     };
 }
 
-const TOTAL_TICKS = 40;
-const LABELS = [
+const TOTAL_MARCAS = 40;
+const ROTULOS = [
     ["100", -90],
     ["25", 0],
     ["50", 90],
     ["75", 180],
 ];
-const RINGS = [
+const ANEIS = [
     [120, "fill-none stroke-slate-800", 14],
     [92, "fill-none stroke-slate-700", 2],
 ];
@@ -21,8 +21,8 @@ const RINGS = [
 function Readines() {
     const size = 320;
     const center = size / 2;
-    const textCenter = {textAnchor: "middle", dominantBaseline: "middle"};
-    const point = (radius, angle) => polarToCartesian(center, center, radius, angle);
+    const centralizarTexto = {textAnchor: "middle", dominantBaseline: "middle"};
+    const ponto = (raio, grau) => polarParaXY(center, center, raio, grau);
 
     return (
         <div className="w-full max-w-65 p-2">
@@ -32,7 +32,7 @@ function Readines() {
                 role="img"
                 aria-label="Readiness gauge em 0 por cento"
             >
-                {RINGS.map(([radius, className, strokeWidth]) => (
+                {ANEIS.map(([radius, className, strokeWidth]) => (
                     <circle
                         key={radius}
                         cx={center}
@@ -43,48 +43,43 @@ function Readines() {
                     />
                 ))}
 
-                {Array.from({length: TOTAL_TICKS}).map((_, index) => {
-                    const angle = -90 + (360 / TOTAL_TICKS) * index;
-                    const isMajor = index % 10 === 0;
-                    const start = point(isMajor ? 118 : 123, angle);
-                    const end = point(132, angle);
+                {Array.from({length: TOTAL_MARCAS}).map((_, i) => {
+                    const grau = -90 + (360 / TOTAL_MARCAS) * i;
+                    const ePrincipal = i % 10 === 0;
+                    const inicio = ponto(ePrincipal ? 118 : 123, grau);
+                    const fim = ponto(132, grau);
 
                     return (
                         <line
-                            key={index}
-                            x1={start.x}
-                            y1={start.y}
-                            x2={end.x}
-                            y2={end.y}
-                            className={isMajor ? "stroke-slate-400" : "stroke-slate-600"}
-                            strokeWidth={isMajor ? "2" : "1"}
+                            key={i}
+                            x1={inicio.x}
+                            y1={inicio.y}
+                            x2={fim.x}
+                            y2={fim.y}
+                            className={ePrincipal ? "stroke-slate-400" : "stroke-slate-600"}
+                            strokeWidth={ePrincipal ? "2" : "1"}
                             strokeLinecap="round"
                         />
                     );
                 })}
 
-                {LABELS.map(([value, angle]) => {
-                    const position = point(148, angle);
+                {ROTULOS.map(([valor, grau]) => {
+                    const pos = ponto(148, grau);
 
                     return (
                         <text
-                            key={value}
-                            x={position.x}
-                            y={position.y}
+                            key={valor}
+                            x={pos.x}
+                            y={pos.y}
                             className="fill-slate-300 text-[16px]"
-                            {...textCenter} //os três pontos servem para espalhar as propriedades do textCenter no elemento text, garantindo que o texto fique centralizado
+                            {...centralizarTexto}
                         >
-                            {value}
+                            {valor}
                         </text>
                     );
                 })}
 
-                <text
-                    x={center}
-                    y={center - 6}
-                    className="fill-slate-50 text-[58px] font-bold"
-                    {...textCenter}
-                >
+                <text x={center} y={center - 6} className="fill-slate-50 text-[58px] font-bold" {...centralizarTexto}>
                     0%
                 </text>
 
