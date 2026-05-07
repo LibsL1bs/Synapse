@@ -18,14 +18,13 @@ const PORT = process.env.PORT || 3000;
 //====== DASHBOARD - GET DATA ================================================================
 
 async function getDashboardData(autenticatedUserId) {
-    const hoje = new Date(Date.now()).toISOString().split("T")[0];
     try {
-        const response = await axios.get(`${API_URL}:${PORT}/user?ID=${autenticatedUserId}`);
+        const response = await axios.get(`${API_URL}:${PORT}/memorias/estado?user_id=${autenticatedUserId}`);
         console.log(response.data); // Dados da resposta
     } catch (error) {
         console.error('[DASHBOARD] falha ao obter dados:', error); // Tratamento de erro
     }
-    let memoria_estado = memoriaRes.data;       
+    let memoria_estado = response.data;       
     // Se não encontrou memoria_estado, cria uma zerada e a usa como retorno
 
     if (!memoria_estado) {
@@ -59,7 +58,7 @@ async function getDashboardData(autenticatedUserId) {
 
 async function createDashboardState(autenticatedUserId, estadoContent) {
   try {
-    const resp = await axios.post(`${API_URL}:${PORT}/memorias/estadou/user?ID=${autenticatedUserId}`, {
+    const resp = await axios.post(`${API_URL}:${PORT}/memorias/estado?user_id=${autenticatedUserId}`, {
         user_id: autenticatedUserId,
         ...estadoContent,
     });
@@ -75,7 +74,7 @@ async function createDashboardState(autenticatedUserId, estadoContent) {
 
 async function updateDashboardState(memoriaId, updatedContent) {
     try {
-        const resp = await axios.put(`${API_URL}:${PORT}/memorias/estadou/${memoriaId}`, updatedContent);
+        const resp = await axios.put(`${API_URL}:${PORT}/memorias/estado/${memoriaId}`, updatedContent);
         console.log("[DASHBOARD] estado atualizado:", resp.data);
     } catch (error) {
         console.error('[DASHBOARD] falha ao atualizar estado:', error);

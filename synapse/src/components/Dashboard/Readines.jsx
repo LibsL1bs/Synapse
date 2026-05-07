@@ -6,57 +6,48 @@ function polarToCartesian(cx, cy, radius, angleDeg) {
     };
 }
 
+const TOTAL_TICKS = 40;
+const LABELS = [
+    ["100", -90],
+    ["25", 0],
+    ["50", 90],
+    ["75", 180],
+];
+const RINGS = [
+    [120, "fill-none stroke-slate-800", 14],
+    [92, "fill-none stroke-slate-700", 2],
+];
+
 function Readines() {
     const size = 320;
     const center = size / 2;
-    const outerRadius = 120;
-    const innerRadius = 92;
-    const tickOuterRadius = 132;
-    const majorTickInnerRadius = 118;
-    const minorTickInnerRadius = 123;
-    const totalTicks = 40;
-
-    const labels = [
-        {value: "100", angle: -90},
-        {value: "25", angle: 0},
-        {value: "50", angle: 90},
-        {value: "75", angle: 180},
-    ];
+    const textCenter = {textAnchor: "middle", dominantBaseline: "middle"};
+    const point = (radius, angle) => polarToCartesian(center, center, radius, angle);
 
     return (
-        <div className="w-full max-w-sm mx-auto p-4">
+        <div className="w-full max-w-65 p-2">
             <svg
                 viewBox={`0 0 ${size} ${size}`}
                 className="w-full h-auto"
                 role="img"
                 aria-label="Readiness gauge em 0 por cento"
             >
-                <circle
-                    cx={center}
-                    cy={center}
-                    r={outerRadius}
-                    className="fill-none stroke-slate-800"
-                    strokeWidth="14"
-                />
+                {RINGS.map(([radius, className, strokeWidth]) => (
+                    <circle
+                        key={radius}
+                        cx={center}
+                        cy={center}
+                        r={radius}
+                        className={className}
+                        strokeWidth={strokeWidth}
+                    />
+                ))}
 
-                <circle
-                    cx={center}
-                    cy={center}
-                    r={innerRadius}
-                    className="fill-none stroke-slate-700"
-                    strokeWidth="2"
-                />
-
-                {Array.from({length: totalTicks}).map((_, index) => {
-                    const angle = -90 + (360 / totalTicks) * index;
+                {Array.from({length: TOTAL_TICKS}).map((_, index) => {
+                    const angle = -90 + (360 / TOTAL_TICKS) * index;
                     const isMajor = index % 10 === 0;
-                    const start = polarToCartesian(
-                        center,
-                        center,
-                        isMajor ? majorTickInnerRadius : minorTickInnerRadius,
-                        angle
-                    );
-                    const end = polarToCartesian(center, center, tickOuterRadius, angle);
+                    const start = point(isMajor ? 118 : 123, angle);
+                    const end = point(132, angle);
 
                     return (
                         <line
@@ -72,19 +63,18 @@ function Readines() {
                     );
                 })}
 
-                {labels.map((label) => {
-                    const position = polarToCartesian(center, center, 148, label.angle);
+                {LABELS.map(([value, angle]) => {
+                    const position = point(148, angle);
 
                     return (
                         <text
-                            key={label.value}
+                            key={value}
                             x={position.x}
                             y={position.y}
                             className="fill-slate-300 text-[16px]"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
+                            {...textCenter}
                         >
-                            {label.value}
+                            {value}
                         </text>
                     );
                 })}
@@ -93,8 +83,7 @@ function Readines() {
                     x={center}
                     y={center - 6}
                     className="fill-slate-50 text-[58px] font-bold"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
+                    {...textCenter}
                 >
                     0%
                 </text>
