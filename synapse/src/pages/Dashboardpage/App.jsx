@@ -6,7 +6,7 @@ import Alimentacao from "../../components/Dashboard/Alimentacao";
 
 function Dashboard() {
     return (
-        <div className="bg-slate-950 flex items-start justify-start gap-4 p-4">
+        <div className="bg-slate-950 flex items-start justify-start gap-4 p-4 w-full h-full">
             <Readines />
             <Fadiga />
             <Tendencias />
