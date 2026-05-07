@@ -4,10 +4,10 @@ import Senha from "../../components/Login/MeusInputs/Senha";
 import Sessao from "../../components/Login/Text/IniciarSessao";
 import LogoSynapse from "../../components/Login/Text/LogoSynapse";
 import Subtitulo from "../../components/Login/Text/Subtitulo";
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api } from "../../../backend/api/api-config";
 
 function App() {
 
@@ -24,12 +24,14 @@ function App() {
 
     async function login() {
         try {
-            await axios.post('http://192.168.1.33:3000/auth/login', {
+            const {status } = await api.post('/auth/login', {
                 email: email,
                 password: senha
             });
+            console.log(status);
             navigate('/dashboard');
         } catch (err) {
+            console.log(err);
             if (err.response) {
                 setMsg("Email ou senha incorretos");
             } else {
@@ -54,7 +56,7 @@ function App() {
 
                             {msg ? <p className="text-red-400 text-sm text-center">{msg}</p> : null}
 
-                            <BotaoLogin onClick={trocar} />
+                            <BotaoLogin onClick={()=> login()} />
                         </article>
                     </div>
 
