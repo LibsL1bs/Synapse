@@ -15,14 +15,14 @@ function Sono({dados = null}) {
     };
 
     return (
-        <div className="w-full max-w-80 p-3 bg-slate-800 rounded-2xl">
-            <div className="flex items-center gap-3 mb-4">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full" />
+        <div className="bg-slate-800 rounded-lg p-3 text-slate-50 min-w-[320px]">
+            <div className="flex items-center gap-3 mb-3">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-100">Sono</h2>
+                <div className="flex-1 h-px bg-slate-600"></div>
             </div>
 
-            <div className="mb-4">
-                <div className="text-3xl font-bold text-slate-50 mb-2">{dadosStd.totalHoras} horas</div>
+            <div className="mb-3">
+                <div className="text-2xl font-bold text-slate-50 mb-1">{dadosStd.totalHoras} horas</div>
                 <div className="flex justify-between text-xs text-slate-400">
                     <span>Dias preenchidos</span>
                     <span className="font-semibold text-slate-300">

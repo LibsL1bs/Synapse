@@ -1,17 +1,16 @@
 function Alimentacao() {
     return (
-        <div className="bg-slate-800 rounded-lg p-4 text-slate-50">
-            <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-lg font-semibold">Alimentação</h2>
-                <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
+        <div className="bg-slate-800 rounded-lg p-3 text-slate-50 min-w-[320px]">
+            <div className="flex items-center gap-3 mb-3">
+                <div className="text-xs font-bold uppercase tracking-widest text-slate-100">ALIMENTAÇÃO</div>
                 <div className="flex-1 h-px bg-slate-600"></div>
             </div>
 
-            <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-slate-50">0 kcal</div>
+            <div className="text-center mb-4">
+                <div className="text-3xl font-bold text-slate-50">0 kcal</div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-4">
                 <div className="text-center">
                     <div className="text-sm text-slate-400">Proteínas</div>
                     <div className="text-lg font-semibold text-slate-50">0 g</div>
