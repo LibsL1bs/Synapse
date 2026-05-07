@@ -205,6 +205,32 @@ routes.post("/auth/register", requireAdminAuth, async (req, res) => {
 
 
 
+//===================================================================================================
+//------------------------------------ MEMORIAS - PUBLIC -------------------------------------------
+//===================================================================================================
+
+routes.get("/memorias/estado", async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    if (!user_id) return res.status(400).json({ error: "Parâmetro user_id é obrigatório." });
+
+    const rows = await sql`
+      SELECT id_memoria, nome
+      FROM memorias
+      WHERE usuario_id = ${user_id}
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+    const memoria = rows[0];
+    if (!memoria) return res.status(404).json({ error: "Memória não encontrada para o usuário." });
+
+    return res.status(200).json({ id_memoria: Number(memoria.id_memoria), nome: memoria.nome });
+  } catch (error) {
+    console.error("[MEMORIAS][ESTADO][500] erro interno:", error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
 
 
 export default routes;
