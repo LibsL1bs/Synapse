@@ -72,7 +72,7 @@ function Readines() {
                             x={position.x}
                             y={position.y}
                             className="fill-slate-300 text-[16px]"
-                            {...textCenter}
+                            {...textCenter} //os três pontos servem para espalhar as propriedades do textCenter no elemento text, garantindo que o texto fique centralizado
                         >
                             {value}
                         </text>
