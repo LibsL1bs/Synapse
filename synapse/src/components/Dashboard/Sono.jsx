@@ -19,7 +19,6 @@ function Sono({dados = null}) {
             <div className="flex items-center gap-3 mb-4">
                 <div className="w-2 h-2 bg-cyan-400 rounded-full" />
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-100">Sono</h2>
-                <div className="flex-1 h-px bg-slate-600" />
             </div>
 
             <div className="mb-4">
