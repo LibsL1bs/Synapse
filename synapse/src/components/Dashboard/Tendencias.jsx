@@ -1,5 +1,5 @@
 function Tendencias({dados = []}) {
-    const hasDados = Array.isArray(dados) && dados.length > 0;
+    const hasDados = Array.isArray(dados) && dados.length > 0; //coloquei as coisas em span para ser preenchidos com os dados reais dps
 
     return (
         <div className="w-full max-w-65 p-4 bg-slate-800 rounded-2xl">
