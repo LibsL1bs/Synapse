@@ -2,7 +2,7 @@ function Tendencias({dados = []}) {
     const hasDados = Array.isArray(dados) && dados.length > 0; //coloquei as coisas em span para ser preenchidos com os dados reais dps
 
     return (
-        <div className="w-full max-w-3xl p-4 bg-slate-800 rounded-2xl">
+        <div className="w-full max-w-3xl  border-slate-800 bg-slate-900 p-5 rounded-2xl">
             <div className="text-xs font-bold uppercase tracking-widest text-slate-100 mb-4">TENDÊNCIA</div>
             <div className="flex-1 h-px bg-slate-600"></div>
 

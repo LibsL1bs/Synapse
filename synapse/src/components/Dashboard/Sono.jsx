@@ -15,7 +15,7 @@ function Sono({dados = null}) {
     };
 
     return (
-        <div className="bg-slate-800 rounded-lg p-2 text-slate-50 min-w-[320px]">
+        <div className=" border-slate-800 bg-slate-900 p-5 rounded-lg text-slate-50 min-w-[320px]">
             <div className="flex items-center gap-3 mb-2">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-100">Sono</h2>
                 <div className="flex-1 h-px bg-slate-600"></div>
