@@ -168,7 +168,7 @@ routes.post("/auth/login", async (req, res) => {
     }
 
     const rows = await sql`
-      SELECT senha
+      SELECT id_user, senha
       FROM users
       WHERE LOWER(TRIM(email)) = ${email}
       ORDER BY id_user DESC
@@ -184,7 +184,7 @@ routes.post("/auth/login", async (req, res) => {
     }
 
     console.log(`[AUTH][LOGIN][200] login bem-sucedido for email=${email}`);
-    return res.status(200).json({ message: "Login bem-sucedido!" });
+    return res.status(200).json({ message: "Login bem-sucedido!", id_user: user.id_user });
 
   } catch (error) {
     console.error("[AUTH][LOGIN][500] erro interno:", error);
@@ -223,22 +223,36 @@ routes.post("/auth/register", async (req, res) => {
 //------------------------------------ MEMORIAS - PUBLIC -------------------------------------------
 //===================================================================================================
 
-routes.get("/memorias/estado:user_id", async (req, res) => {
+routes.get("/memorias/estado", async (req, res) => {
   try {
     const { user_id } = req.query;
     if (!user_id) return res.status(400).json({ error: "Parâmetro user_id é obrigatório." });
 
     const rows = await sql`
-      SELECT id_memoria, nome
-      FROM memorias
-      WHERE usuario_id = ${user_id}
-      ORDER BY created_at DESC
+      SELECT m.id_memoria, m.nome, m.created_at,
+             e.bp, e.squat, e.dl,
+             e.sono_seg, e.sono_ter, e.sono_qua, e.sono_qui,
+             e.sono_sex, e.sono_sab, e.sono_dom,
+             e.proteinas, e.carboidratos, e.calorias
+      FROM memorias m
+      LEFT JOIN memorias_estado e ON e.id_memoria = m.id_memoria
+      WHERE m.usuario_id = ${user_id}
+      ORDER BY m.created_at DESC
       LIMIT 1
     `;
     const memoria = rows[0];
-    if (!memoria) return res.status(404).json({ error: "Memória não encontrada para o usuário." });
+    if (!memoria) return res.status(200).json({
+      id_memoria: null,
+      nome: null,
+      created_at: null,
+      sono_seg: null, sono_ter: null, sono_qua: null, sono_qui: null,
+      sono_sex: null, sono_sab: null, sono_dom: null,
+      bp: null, squat: null, dl: null,
+      proteinas: null, carboidratos: null, calorias: null,
+      disposicao_relativa: null,
+    });
 
-    return res.status(200).json({ id_memoria: Number(memoria.id_memoria), nome: memoria.nome });
+    return res.status(200).json(memoria);
   } catch (error) {
     console.error("[MEMORIAS][ESTADO][500] erro interno:", error);
     return res.status(500).json({ error: "Erro interno do servidor" });
@@ -247,7 +261,7 @@ routes.get("/memorias/estado:user_id", async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 
-routes.post("/memorias/estado:user_id", async (req, res) => {
+routes.post("/memorias/estado", async (req, res) => {
   try {
     const { user_id } = req.query;
     if (!user_id) return res.status(400).json({ error: "Parâmetro user_id é obrigatório." });
@@ -256,11 +270,18 @@ routes.post("/memorias/estado:user_id", async (req, res) => {
     const nome = `estado_${data}`;
 
     const rows = await sql`
-      INSERT INTO memorias (usuario_id, nome, tipo, subtipo)
-      VALUES (${user_id}, ${nome}, 'estado', 'estado')
+      INSERT INTO memorias (id_memoria, usuario_id, nome, tipo, subtipo, created_at)
+      VALUES (gen_random_uuid(), ${user_id}, ${nome}, 'estado', 'estado', NOW())
       RETURNING id_memoria
     `;
-    return res.status(201).json({ id_memoria: Number(rows[0].id_memoria) });
+    const id_memoria = rows[0].id_memoria;
+
+    await sql`
+      INSERT INTO memorias_estado (id_memoria)
+      VALUES (${id_memoria})
+    `;
+
+    return res.status(201).json({ id_memoria });
   } catch (error) {
     console.error("[MEMORIAS][POST][500] erro interno:", error);
     return res.status(500).json({ error: "Erro interno do servidor" });

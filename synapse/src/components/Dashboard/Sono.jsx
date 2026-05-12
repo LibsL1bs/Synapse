@@ -10,9 +10,8 @@ const SEMANA_PADRAO = [
     { dia: "Dom", horas: 0 },
 ];
 
-function Sono({ dados = null, onSalvar }) {
+function Sono({ dados = null, onChange }) {
     const [semana, setSemana] = useState(dados?.semana || SEMANA_PADRAO);
-    const [salvando, setSalvando] = useState(false);
 
     useEffect(() => {
         if (dados?.semana) setSemana(dados.semana);
@@ -25,13 +24,7 @@ function Sono({ dados = null, onSalvar }) {
         const nova = [...semana];
         nova[index] = { ...nova[index], horas: Math.min(24, Math.max(0, Number(valor) || 0)) };
         setSemana(nova);
-    }
-
-    async function salvar() {
-        if (!onSalvar) return;
-        setSalvando(true);
-        await onSalvar(semana);
-        setSalvando(false);
+        if (onChange) onChange(nova);
     }
 
     return (
@@ -49,7 +42,7 @@ function Sono({ dados = null, onSalvar }) {
                 </div>
             </div>
 
-            <div className="space-y-1 mb-4">
+            <div className="space-y-1">
                 {semana.map((item, i) => (
                     <div key={i} className="flex justify-between items-center text-sm py-0.5 border-b border-slate-700 last:border-b-0">
                         <span className="text-slate-300">{item.dia}</span>
@@ -64,14 +57,6 @@ function Sono({ dados = null, onSalvar }) {
                     </div>
                 ))}
             </div>
-
-            <button
-                onClick={salvar}
-                disabled={salvando}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold py-2 rounded-lg transition-colors disabled:opacity-50"
-            >
-                {salvando ? "Salvando..." : "Salvar"}
-            </button>
         </div>
     );
 }
