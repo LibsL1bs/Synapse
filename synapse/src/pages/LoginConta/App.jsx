@@ -4,32 +4,29 @@ import Senha from "../../components/Login/MeusInputs/Senha";
 import Sessao from "../../components/Login/Text/IniciarSessao";
 import LogoSynapse from "../../components/Login/Text/LogoSynapse";
 import Subtitulo from "../../components/Login/Text/Subtitulo";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import { api } from "../../../backend/api/api-config";
+import {api} from "../../../backend/api/api-config";
 
 function App() {
-
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [msg, setMsg] = useState('');
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [msg, setMsg] = useState("");
     const navigate = useNavigate();
 
     function trocar() {
-        email === '' || senha === ''
-            ? setMsg("Preencha todos os campos")
-            : login()
+        email === "" || senha === "" ? setMsg("Preencha todos os campos") : login();
     }
 
     async function login() {
         try {
-            const {status } = await api.post('/auth/login', {
+            const {status} = await api.post("/auth/login", {
                 email: email,
-                password: senha
+                password: senha,
             });
             console.log(status);
-            navigate('/dashboard');
+            navigate("/dashboard");
         } catch (err) {
             console.log(err);
             if (err.response) {
@@ -56,14 +53,14 @@ function App() {
 
                             {msg ? <p className="text-red-400 text-sm text-center">{msg}</p> : null}
 
-                            <BotaoLogin onClick={()=> login()} />
+                            <BotaoLogin onClick={() => login()} />
                         </article>
                     </div>
 
                     <p className="text-slate-400 text-sm mt-6">
                         Sem conta?{" "}
                         <span
-                            onClick={() => navigate('/cadastro')}
+                            onClick={() => navigate("/cadastro")}
                             className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold"
                         >
                             CRIAR CONTA
@@ -73,6 +70,5 @@ function App() {
             </main>
         </>
     );
-
 }
 export default App;

@@ -1,101 +1,85 @@
-function polarToCartesian(cx, cy, radius, angleDeg) {
-    const angleRad = (angleDeg * Math.PI) / 180;
+function polarParaXY(cx, cy, raio, grau) {
+    const rad = (grau * Math.PI) / 180;
     return {
-        x: cx + radius * Math.cos(angleRad),
-        y: cy + radius * Math.sin(angleRad),
+        x: cx + raio * Math.cos(rad),
+        y: cy + raio * Math.sin(rad),
     };
 }
+
+const TOTAL_MARCAS = 40;
+const ROTULOS = [
+    ["100", -90],
+    ["25", 0],
+    ["50", 90],
+    ["75", 180],
+];
+const ANEIS = [
+    [120, "fill-none stroke-slate-800", 14],
+    [92, "fill-none stroke-slate-700", 2],
+];
 
 function Readines() {
     const size = 320;
     const center = size / 2;
-    const outerRadius = 120;
-    const innerRadius = 92;
-    const tickOuterRadius = 132;
-    const majorTickInnerRadius = 118;
-    const minorTickInnerRadius = 123;
-    const totalTicks = 40;
-
-    const labels = [
-        {value: "100", angle: -90},
-        {value: "25", angle: 0},
-        {value: "50", angle: 90},
-        {value: "75", angle: 180},
-    ];
+    const centralizarTexto = {textAnchor: "middle", dominantBaseline: "middle"};
+    const ponto = (raio, grau) => polarParaXY(center, center, raio, grau);
 
     return (
-        <div className="w-full max-w-sm mx-auto p-4">
+        <div className="w-full max-w-65 p-2">
             <svg
                 viewBox={`0 0 ${size} ${size}`}
                 className="w-full h-auto"
                 role="img"
                 aria-label="Readiness gauge em 0 por cento"
             >
-                <circle
-                    cx={center}
-                    cy={center}
-                    r={outerRadius}
-                    className="fill-none stroke-slate-800"
-                    strokeWidth="14"
-                />
+                {ANEIS.map(([radius, className, strokeWidth]) => (
+                    <circle
+                        key={radius}
+                        cx={center}
+                        cy={center}
+                        r={radius}
+                        className={className}
+                        strokeWidth={strokeWidth}
+                    />
+                ))}
 
-                <circle
-                    cx={center}
-                    cy={center}
-                    r={innerRadius}
-                    className="fill-none stroke-slate-700"
-                    strokeWidth="2"
-                />
-
-                {Array.from({length: totalTicks}).map((_, index) => {
-                    const angle = -90 + (360 / totalTicks) * index;
-                    const isMajor = index % 10 === 0;
-                    const start = polarToCartesian(
-                        center,
-                        center,
-                        isMajor ? majorTickInnerRadius : minorTickInnerRadius,
-                        angle
-                    );
-                    const end = polarToCartesian(center, center, tickOuterRadius, angle);
+                {Array.from({length: TOTAL_MARCAS}).map((_, i) => {
+                    const grau = -90 + (360 / TOTAL_MARCAS) * i;
+                    const ePrincipal = i % 10 === 0;
+                    const inicio = ponto(ePrincipal ? 118 : 123, grau);
+                    const fim = ponto(132, grau);
 
                     return (
                         <line
-                            key={index}
-                            x1={start.x}
-                            y1={start.y}
-                            x2={end.x}
-                            y2={end.y}
-                            className={isMajor ? "stroke-slate-400" : "stroke-slate-600"}
-                            strokeWidth={isMajor ? "2" : "1"}
+                            key={i}
+                            x1={inicio.x}
+                            y1={inicio.y}
+                            x2={fim.x}
+                            y2={fim.y}
+                            className={ePrincipal ? "stroke-slate-400" : "stroke-slate-600"}
+                            strokeWidth={ePrincipal ? "2" : "1"}
                             strokeLinecap="round"
                         />
                     );
                 })}
 
-                {labels.map((label) => {
-                    const position = polarToCartesian(center, center, 148, label.angle);
+                {ROTULOS.map(([valor, grau]) => {
+                    const pos = ponto(148, grau);
 
                     return (
                         <text
-                            key={label.value}
-                            x={position.x}
-                            y={position.y}
+                            key={valor}
+                            x={pos.x}
+                            y={pos.y}
                             className="fill-slate-300 text-[16px]"
-                            textAnchor="middle"
-                            dominantBaseline="middle"
+                            {...centralizarTexto}
                         >
-                            {label.value}
+                            {valor}
                         </text>
                     );
                 })}
 
-                <text
-                    x={center}
-                    y={center - 6}
-                    className="fill-slate-50 text-[58px] font-bold"
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                >
+                <text x={center} y={center - 6} className="fill-slate-50 text-[58px] font-bold" {...centralizarTexto}>
                     0%
                 </text>
 
