@@ -1,7 +1,8 @@
+/// <reference types="vite/client" />
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://192.168.1.19:3000",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

@@ -59,7 +59,6 @@ async function getDashboardData(autenticatedUserId) {
 async function createDashboardState(autenticatedUserId, estadoContent) {
   try {
     const resp = await axios.post(`${API_URL}:${PORT}/memorias/estado?user_id=${autenticatedUserId}`, {
-        user_id: autenticatedUserId,
         ...estadoContent,
     });
     console.log("[DASHBOARD] memoria de estado criada:", resp.data);
