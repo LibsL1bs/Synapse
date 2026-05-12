@@ -91,8 +91,8 @@ routes.post("/users", async (req, res) => {
     const senhaHash = await hashPassword(senha);
 
     const res = await sql`
-      INSERT INTO users (nome, senha, email, role_user, ativo)
-      VALUES (${nome}, ${senhaHash}, ${email}, ${roleUser}, ${ativo})
+      INSERT INTO users (id_user, nome, senha, email, role_user, ativo)
+      VALUES (gen_random_uuid(),${nome}, ${senhaHash}, ${email}, ${roleUser}, ${ativo})
       RETURNING id_user, nome, email, role_user, ativo
     `;
     return res.status(201).json();
