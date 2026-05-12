@@ -18,11 +18,12 @@ const ANEIS = [
     [92, "fill-none stroke-slate-700", 2],
 ];
 
-function Readines() {
+function Readines({valor = 0}) {
     const size = 320;
     const center = size / 2;
     const centralizarTexto = {textAnchor: "middle", dominantBaseline: "middle"};
     const ponto = (raio, grau) => polarParaXY(center, center, raio, grau);
+    const valor_normalizado = Math.min(Math.max(valor, 0), 100);
 
     return (
         <div className="w-full max-w-65 p-2">
@@ -30,7 +31,7 @@ function Readines() {
                 viewBox={`0 0 ${size} ${size}`}
                 className="w-full h-auto"
                 role="img"
-                aria-label="Readiness gauge em 0 por cento"
+                aria-label={`Readiness gauge em ${valor_normalizado} por cento`}
             >
                 {ANEIS.map(([radius, className, strokeWidth]) => (
                     <circle
@@ -39,8 +40,7 @@ function Readines() {
                         cy={center}
                         r={radius}
                         className={className}
-                        strokeWidth={strokeWidth}
-                    />
+                        strokeWidth={strokeWidth}/>
                 ))}
 
                 {Array.from({length: TOTAL_MARCAS}).map((_, i) => {
@@ -58,8 +58,7 @@ function Readines() {
                             y2={fim.y}
                             className={ePrincipal ? "stroke-slate-400" : "stroke-slate-600"}
                             strokeWidth={ePrincipal ? "2" : "1"}
-                            strokeLinecap="round"
-                        />
+                            strokeLinecap="round"/>
                     );
                 })}
 
@@ -72,15 +71,14 @@ function Readines() {
                             x={pos.x}
                             y={pos.y}
                             className="fill-slate-300 text-[16px]"
-                            {...centralizarTexto}
-                        >
+                            {...centralizarTexto}>
                             {valor}
                         </text>
                     );
                 })}
 
                 <text x={center} y={center - 6} className="fill-slate-50 text-[58px] font-bold" {...centralizarTexto}>
-                    0%
+                    {valor_normalizado}%
                 </text>
 
                 <g transform={`translate(${center}, ${center + 34})`}>
@@ -90,8 +88,7 @@ function Readines() {
                         y="1"
                         className="fill-slate-400 text-[13px] font-semibold"
                         letterSpacing="1"
-                        dominantBaseline="middle"
-                    >
+                        dominantBaseline="middle">
                         READINESS
                     </text>
                 </g>
