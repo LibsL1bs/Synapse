@@ -6,8 +6,17 @@ import LogoSynapse from "../../components/Login/Text/LogoSynapse";
 import Subtitulo from "../../components/Login/Text/Subtitulo";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
 import {api} from "../../../backend/api/api-config";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validar(email, senha) {
+    if (!email.trim()) return "O e-mail não pode estar vazio.";
+    if (!EMAIL_REGEX.test(email)) return "Informe um e-mail válido.";
+    if (!senha) return "A senha não pode estar vazia.";
+    if (senha.length < 6) return "A senha deve ter pelo menos 6 caracteres.";
+    return null;
+}
 
 function App() {
     const [email, setEmail] = useState("");
@@ -16,7 +25,9 @@ function App() {
     const navigate = useNavigate();
 
     function trocar() {
-        email === "" || senha === "" ? setMsg("Preencha todos os campos") : login();
+        const erro = validar(email, senha);
+        if (erro) { setMsg(erro); return; }
+        login();
     }
 
     async function login() {
@@ -32,11 +43,10 @@ function App() {
 
             navigate("/dashboard");
         } catch (err) {
-            console.log(err);
             if (err.response) {
-                setMsg("Email ou senha incorretos");
+                setMsg("Email ou senha incorretos.");
             } else {
-                setMsg("Erro ao conectar com o servidor");
+                setMsg("Erro ao conectar com o servidor.");
             }
         }
     }

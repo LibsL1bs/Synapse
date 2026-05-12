@@ -90,12 +90,12 @@ routes.post("/users", async (req, res) => {
 
     const senhaHash = await hashPassword(senha);
 
-    const res = await sql`
+    const rows = await sql`
       INSERT INTO users (id_user, nome, senha, email, role_user, ativo)
       VALUES (gen_random_uuid(),${nome}, ${senhaHash}, ${email}, ${roleUser}, ${ativo})
       RETURNING id_user, nome, email, role_user, ativo
     `;
-    return res.status(201).json();
+    return res.status(201).json(rows[0]);
   } catch (error) {
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
