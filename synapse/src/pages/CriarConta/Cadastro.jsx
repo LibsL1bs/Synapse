@@ -7,10 +7,55 @@ import CriarConta_Title from "../../components/CriarConta/Textos/CriarConta";
 import Subtitulo_Cad from "../../components/CriarConta/Textos/Subtitle";
 
 
+import { useNavigate } from "react-router-dom";
+
+
+
+import { useState } from "react";
+
+
+
 function CriarConta() {
 
+    const navigate = useNavigate();
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [msg, setMsg] = useState('');
 
-  
+    function trocar() {
+        console.log(nome, email, senha)
+        nome === '' || email === '' || senha === ''
+            ? setMsg("Preencha todos os campos")
+            : cadastrar()
+    }
+    async function cadastrar() {
+        try {
+            const resp = await fetch('http://192.168.1.33:3001/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({nome, email, senha })
+            });
+
+            if (resp.status==201) {
+                setMsg("Cadastro realizado! Redirecionando...");
+               return setTimeout(() => navigate("/login"), 2000);
+            } else {
+                const data = await resp.json();
+               return setMsg(data.message || "Erro ao cadastrar");
+            }
+        } catch (error) {
+            console.log(error)
+            alert("Erro de conexão com o servidor. Verifique sua internet.");
+
+           return setMsg("Erro de conexão com o servidor");
+
+        }
+
+    }
+
 
 
     return (
@@ -27,13 +72,13 @@ function CriarConta() {
                         <article className="flex flex-col gap-5 w-full">
 
 
-                            <Name />
-                            <Email />
-                            <Senha />
-                            <ConfirmPass />
+                            <Name valor={nome} mudar={(e) => setNome(e.target.value)} />
+                            <Email valor={email} mudar={(e) => setEmail(e.target.value)} />
+                            <Senha valor={senha} mudar={(e) => setSenha(e.target.value)} />
 
+                            <BotaoCad onClick={()=>trocar()} />
+                            {msg}
 
-                            <BotaoCad />
 
 
                         </article>
@@ -53,4 +98,5 @@ function CriarConta() {
         </>
     )
 }
+
 export default CriarConta; 
