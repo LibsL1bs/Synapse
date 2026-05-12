@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import Modal from './Modal'
 
 const USUARIO_PADRAO = {
   nome: 'Novo Usuário',
@@ -11,17 +12,24 @@ const COLUNAS_TABELA = ['Nome', 'Role', 'Status', 'Ações']
 
 function Usuario() {
   const [usuarios, setUsuarios] = useState([])
+  const [modalAberto, setModalAberto] = useState(false)
+  const [usuarioEditando, setUsuarioEditando] = useState(null)
+  const [indexEditando, setIndexEditando] = useState(null)
 
   const handleCriarUsuario = () => {
     setUsuarios((usuariosAtuais) => [...usuariosAtuais, { ...USUARIO_PADRAO }])
   }
 
   const handleEditarUsuario = (index) => {
-    setUsuarios((usuariosAtuais) =>
-      usuariosAtuais.map((usuario, i) =>
-        i === index ? { ...usuario, nome: 'Editado' } : usuario
-      )
-    )
+    setUsuarioEditando(usuarios[index])
+    setIndexEditando(index)
+    setModalAberto(true)
+  }
+
+  const handleSalvarEdicao = (dadosEditados) => {
+    const novosUsuarios = [...usuarios]
+    novosUsuarios[indexEditando] = dadosEditados
+    setUsuarios(novosUsuarios)
   }
 
   const handleExcluirUsuario = (index) => {
@@ -74,8 +82,16 @@ function Usuario() {
                       </span>
                     </td>
                     <td className="px-6 py-5">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-300">
-                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                      <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm ${
+                        usuario.status === 'ativo' 
+                          ? 'bg-emerald-500/10 text-emerald-200' 
+                          : 'bg-red-500/10 text-red-200'
+                      }`}>
+                        <span className={`h-2.5 w-2.5 rounded-full ${
+                          usuario.status === 'ativo' 
+                            ? 'bg-emerald-400' 
+                            : 'bg-red-400'
+                        }`} />
                         {usuario.status}
                       </span>
                     </td>
@@ -102,9 +118,16 @@ function Usuario() {
           </div>
         )}
       </div>
+      <Modal
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        usuario={usuarioEditando}
+        onSave={handleSalvarEdicao}
+      />
     </section>
   )
 }
 
 export default Usuario;
+
 
