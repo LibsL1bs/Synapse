@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import Modal from './Modal'
 
 function Usuario() {
   const [usuarios, setUsuarios] = useState([])
+  const [modalAberto, setModalAberto] = useState(false)
+  const [usuarioEditando, setUsuarioEditando] = useState(null)
+  const [indexEditando, setIndexEditando] = useState(null)
 
   const handleCriarUsuario = () => {
     const novoUsuario = {
@@ -14,8 +18,14 @@ function Usuario() {
   }
 
   const handleEditarUsuario = (index) => {
+    setUsuarioEditando(usuarios[index])
+    setIndexEditando(index)
+    setModalAberto(true)
+  }
+
+  const handleSalvarEdicao = (dadosEditados) => {
     const novosUsuarios = [...usuarios]
-    novosUsuarios[index].nome = 'Editado'
+    novosUsuarios[indexEditando] = dadosEditados
     setUsuarios(novosUsuarios)
   }
 
@@ -74,8 +84,16 @@ function Usuario() {
                       </span>
                     </td>
                     <td className="px-6 py-5">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-sm text-emerald-200">
-                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                      <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm ${
+                        usuario.status === 'ativo' 
+                          ? 'bg-emerald-500/10 text-emerald-200' 
+                          : 'bg-red-500/10 text-red-200'
+                      }`}>
+                        <span className={`h-2.5 w-2.5 rounded-full ${
+                          usuario.status === 'ativo' 
+                            ? 'bg-emerald-400' 
+                            : 'bg-red-400'
+                        }`} />
                         {usuario.status}
                       </span>
                     </td>
@@ -104,9 +122,16 @@ function Usuario() {
           </div>
         )}
       </div>
+      <Modal
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        usuario={usuarioEditando}
+        onSave={handleSalvarEdicao}
+      />
     </div>
   )
 }
 
 export default Usuario;
+
 
