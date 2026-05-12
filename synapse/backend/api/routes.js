@@ -1,7 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import sql from "./database.js";
-import requireAdminAuth from "./middlewares/requireAdminAuth.js";
 
 
 const routes = express.Router();
@@ -25,7 +24,7 @@ const comparePassword = async (password, storedPassword) => {
 //------------------------------------ USUARIOS - ADMIN ---------------------------------------------
 //===================================================================================================
 
-routes.get("/users", requireAdminAuth, async (req, res) => {
+routes.get("/users", async (req, res) => {
   try {
     const rows = await sql`SELECT id_user, nome, email, role_user, ativo FROM users ORDER BY id_user ASC`;
     const users = rows.map((row) => {
@@ -48,7 +47,7 @@ routes.get("/users", requireAdminAuth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 
-routes.get("/users/:id", requireAdminAuth, async (req, res) => {
+routes.get("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const rows = await sql`SELECT id_user, nome, email, role_user, ativo FROM users WHERE id_user = ${id}`;
@@ -64,7 +63,7 @@ routes.get("/users/:id", requireAdminAuth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 
-routes.post("/users", requireAdminAuth, async (req, res) => {
+routes.post("/users", async (req, res) => {
   try {
     const nome = String(req.body?.nome ?? "").trim();
     const email = String(req.body?.email ?? "").trim().toLowerCase();
@@ -90,7 +89,7 @@ routes.post("/users", requireAdminAuth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 
-routes.put("/users/:id", requireAdminAuth, async (req, res) => {
+routes.put("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const nome = String(req.body?.nome ?? "").trim();
@@ -125,7 +124,7 @@ routes.put("/users/:id", requireAdminAuth, async (req, res) => {
 
 //---------------------------------------------------------------------------------------------------
 
-routes.delete("/users/:id", requireAdminAuth, async (req, res) => {
+routes.delete("/users/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const rows = await sql`DELETE FROM users WHERE id_user = ${id} RETURNING id_user`;
@@ -181,7 +180,7 @@ routes.post("/auth/login", async (req, res) => {
     
 //---------------------------------------------------------------------------------------------------
 
-routes.post("/auth/register", requireAdminAuth, async (req, res) => {
+routes.post("/auth/register", async (req, res) => {
   try {
     const nome = String(req.body?.nome ?? "").trim();
     const email = String(req.body?.email ?? "").trim().toLowerCase();
@@ -194,7 +193,7 @@ routes.post("/auth/register", requireAdminAuth, async (req, res) => {
 
     const res = await sql`
       INSERT INTO users (nome, email, senha, role_user, ativo)
-      VALUES (${nome}, ${email}, ${senha})
+      VALUES (${nome}, ${email}, ${senha}, '0', true)
       RETURNING id_user
     `;
   } catch (error) {
@@ -209,7 +208,7 @@ routes.post("/auth/register", requireAdminAuth, async (req, res) => {
 //------------------------------------ MEMORIAS - PUBLIC -------------------------------------------
 //===================================================================================================
 
-routes.get("/memorias/estado", async (req, res) => {
+routes.get("/memorias/estado:user_id", async (req, res) => {
   try {
     const { user_id } = req.query;
     if (!user_id) return res.status(400).json({ error: "Parâmetro user_id é obrigatório." });
@@ -229,6 +228,64 @@ routes.get("/memorias/estado", async (req, res) => {
     console.error("[MEMORIAS][ESTADO][500] erro interno:", error);
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
+});
+
+//---------------------------------------------------------------------------------------------------
+
+routes.post("/memorias/estado:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    if (!user_id) return res.status(400).json({ error: "Parâmetro user_id é obrigatório." });
+
+    const data = Date.now();
+    const nome = `estado_${data}`;
+
+    const rows = await sql`
+      INSERT INTO memorias (usuario_id, nome, tipo, subtipo)
+      VALUES (${user_id}, ${nome}, 'estado', 'estado')
+      RETURNING id_memoria
+    `;
+    return res.status(201).json({ id_memoria: Number(rows[0].id_memoria) });
+  } catch (error) {
+    console.error("[MEMORIAS][POST][500] erro interno:", error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
+  }
+});
+
+//---------------------------------------------------------------------------------------------------
+
+routes.put("/memorias/estado/:id_memoria", async (req, res) => {
+  try {
+    const { id_memoria } = req.params;
+    const content = req.body?.content;
+
+    if (!content) return res.status(400).json({ error: "Campo content é obrigatório." });
+
+    const rows = await sql`
+      UPDATE memorias_estado
+      SET bp = ${content.bp},
+          squat = ${content.squat},
+          dl = ${content.dl},
+          sono_seg = ${content.sono_seg},
+          sono_ter = ${content.sono_ter},
+          sono_qua = ${content.sono_qua},
+          sono_qui = ${content.sono_qui},
+          sono_sex = ${content.sono_sex},
+          sono_sab = ${content.sono_sab},
+          sono_dom = ${content.sono_dom},
+          proteinas = ${content.proteinas},
+          carboidratos = ${content.carboidratos},
+          calorias = ${content.calorias}
+      WHERE id_memoria = ${id_memoria}
+      RETURNING id_memoria
+    `;
+    if (rows.length === 0) return res.status(404).json({ error: "Memória não encontrada." });
+
+    return res.status(200).json({ id_memoria: Number(rows[0].id_memoria) });
+  } catch (error) {
+    console.error("[MEMORIAS][PUT][500] erro interno:", error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
+  } 
 });
 
 
