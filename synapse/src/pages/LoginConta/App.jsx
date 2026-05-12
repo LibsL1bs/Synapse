@@ -27,7 +27,7 @@ function App() {
             });
 
             if (response.data?.id_user) {
-                localStorage.setItem("userId", response.data.id_user);
+                sessionStorage.setItem("user_id", response.data.id_user);
             }
 
             navigate("/dashboard");

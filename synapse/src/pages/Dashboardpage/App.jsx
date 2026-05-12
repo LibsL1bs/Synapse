@@ -1,32 +1,30 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getDashboardData, updateDashboardState } from "../../../backend/edge_functions/dashboardService";
 import Readines from "../../components/Dashboard/Readines";
 import Fadiga from "../../components/Dashboard/Fadiga";
 import Tendencias from "../../components/Dashboard/Tendencias";
 import Sono from "../../components/Dashboard/Sono";
 import Alimentacao from "../../components/Dashboard/Alimentacao";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:3000";
-
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [dados, setDados] = useState(null);
   const [idMemoria, setIdMemoria] = useState(null);
   const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState(null);
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    const userId = sessionStorage.getItem("user_id");
 
     if (!userId) {
-      setErro("Usuário não identificado");
-      setCarregando(false);
+      navigate("/login");
       return;
     }
 
-    axios
-      .get(`${API_BASE_URL}/memorias/estado?user_id=${userId}`)
-      .then(response => {
-        const data = response.data;
+    getDashboardData(userId)
+      .then(data => {
         const semana = [
           { dia: "Seg", horas: data?.sono_seg || 0 },
           { dia: "Ter", horas: data?.sono_ter || 0 },
@@ -68,34 +66,45 @@ export default function Dashboard() {
       .finally(() => setCarregando(false));
   }, []);
 
-  async function salvarSono(novaSemana) {
-    if (!idMemoria || !dados) return;
-
-    const content = {
-      bp: dados.levantamentos.bp,
-      squat: dados.levantamentos.squat,
-      dl: dados.levantamentos.dl,
-      sono_seg: novaSemana[0].horas,
-      sono_ter: novaSemana[1].horas,
-      sono_qua: novaSemana[2].horas,
-      sono_qui: novaSemana[3].horas,
-      sono_sex: novaSemana[4].horas,
-      sono_sab: novaSemana[5].horas,
-      sono_dom: novaSemana[6].horas,
-      proteinas: dados.alimentacao.proteinas,
-      carboidratos: dados.alimentacao.carboidratos,
-      calorias: dados.alimentacao.calorias,
-    };
-
-    await axios.put(`${API_BASE_URL}/memorias/estado/${idMemoria}`, { content });
-
-    const totalHoras = novaSemana.reduce((acc, d) => acc + d.horas, 0).toFixed(1);
-    const diasPreenchidos = novaSemana.filter(d => d.horas > 0).length;
-
+  function onSonoChange(novaSemana) {
     setDados(prev => ({
       ...prev,
-      sono: { ...prev.sono, semana: novaSemana, totalHoras, diasPreenchidos },
+      sono: { ...prev.sono, semana: novaSemana },
     }));
+  }
+
+  function onAlimentacaoChange(novosValores) {
+    setDados(prev => ({
+      ...prev,
+      alimentacao: novosValores,
+    }));
+  }
+
+  async function salvar() {
+    if (!idMemoria || !dados) return;
+    setSalvando(true);
+    try {
+      const content = {
+        bp: dados.levantamentos.bp,
+        squat: dados.levantamentos.squat,
+        dl: dados.levantamentos.dl,
+        sono_seg: dados.sono.semana[0].horas,
+        sono_ter: dados.sono.semana[1].horas,
+        sono_qua: dados.sono.semana[2].horas,
+        sono_qui: dados.sono.semana[3].horas,
+        sono_sex: dados.sono.semana[4].horas,
+        sono_sab: dados.sono.semana[5].horas,
+        sono_dom: dados.sono.semana[6].horas,
+        proteinas: dados.alimentacao.proteinas,
+        carboidratos: dados.alimentacao.carboidratos,
+        calorias: dados.alimentacao.calorias,
+      };
+      await updateDashboardState(idMemoria, { content });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSalvando(false);
+    }
   }
 
   return (
@@ -105,6 +114,13 @@ export default function Dashboard() {
           <p className="text-xs uppercase tracking-widest text-slate-400">Painel</p>
           <h1 className="text-2xl font-semibold text-slate-50">Estado Atual</h1>
         </div>
+        <button
+          onClick={salvar}
+          disabled={salvando || !idMemoria}
+          className="bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+        >
+          {salvando ? "Salvando..." : "Salvar"}
+        </button>
       </header>
 
       {carregando && <div className="text-slate-400">Carregando dados...</div>}
@@ -118,8 +134,8 @@ export default function Dashboard() {
             <Readines valor={dados.disposicao_relativa} />
           </div>
           <div className="flex flex-col gap-4">
-            <Sono dados={dados.sono} onSalvar={salvarSono} />
-            <Alimentacao proteinas={dados.alimentacao.proteinas} carboidratos={dados.alimentacao.carboidratos} calorias={dados.alimentacao.calorias} />
+            <Sono dados={dados.sono} onChange={onSonoChange} />
+            <Alimentacao proteinas={dados.alimentacao.proteinas} carboidratos={dados.alimentacao.carboidratos} calorias={dados.alimentacao.calorias} onChange={onAlimentacaoChange} />
           </div>
         </div>
       )}
