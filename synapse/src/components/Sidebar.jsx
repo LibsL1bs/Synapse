@@ -6,7 +6,7 @@ function Sidebar() {
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const userId = sessionStorage.getItem("user_id");
+        const userId = localStorage.getItem("userId");
         if (!userId) return;
 
         api.get(`/users/${userId}/role`)
@@ -24,7 +24,14 @@ function Sidebar() {
             <NavLink to="/perfilconta">Perfil</NavLink>
             <NavLink to="/metricas">Métricas</NavLink>
             <NavLink to="/educacional">Educacional</NavLink>
-            {isAdmin && <NavLink to="/adm">Administração</NavLink>}
+
+            {isAdmin && (
+                <>
+                    <hr className="border-slate-700 my-2" />
+                    <p className="text-xs uppercase tracking-widest text-slate-500 px-1">Admin</p>
+                    <NavLink to="/adm">Administração</NavLink>
+                </>
+            )}
         </aside>
     );
 }
