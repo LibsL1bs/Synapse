@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboardpage/App"
 import Login from "./pages/LoginConta/App"
 import Cadastro from "../src/pages/CriarConta/Cadastro"
 
+import Usuario from "./components/Admin/Usuario"
+
 function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen">
@@ -24,6 +26,7 @@ function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
+        <Route path="/usuario" element={<DashboardLayout><Usuario /></DashboardLayout>} />
         <Route path="/perfilconta" element={<DashboardLayout><PerfilConta /></DashboardLayout>} />
         <Route path="/cadastro" element={<Cadastro/>}/>
 

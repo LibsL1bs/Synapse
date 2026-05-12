@@ -21,11 +21,15 @@ function App() {
 
     async function login() {
         try {
-            const {status} = await api.post("/auth/login", {
+            const response = await api.post("/auth/login", {
                 email: email,
                 password: senha,
             });
-            console.log(status);
+
+            if (response.data?.id_user) {
+                localStorage.setItem("userId", response.data.id_user);
+            }
+
             navigate("/dashboard");
         } catch (err) {
             console.log(err);
@@ -61,8 +65,7 @@ function App() {
                         Sem conta?{" "}
                         <span
                             onClick={() => navigate("/cadastro")}
-                            className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold"
-                        >
+                            className="text-cyan-400 cursor-pointer hover:text-cyan-300 font-semibold">
                             CRIAR CONTA
                         </span>
                     </p>
