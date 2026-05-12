@@ -5,6 +5,8 @@ import Home from "./pages/Homepage/Home"
 import PerfilConta from "./pages/PerfilConta/Perfilconta"
 import Dashboard from "./pages/Dashboardpage/App"
 import Login from "./pages/LoginConta/App"
+import Cadastro from "../src/pages/CriarConta/Cadastro"
+
 
 function DashboardLayout({ children }) {
   return (
@@ -24,6 +26,8 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
         <Route path="/perfilconta" element={<DashboardLayout><PerfilConta /></DashboardLayout>} />
+        <Route path="/cadastro" element={<Cadastro/>}/>
+
       </Routes>
     </BrowserRouter>
   )
