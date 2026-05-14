@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboardpage/App"
 import AdminPage from "./pages/Admpage/App"
 import Login from "./pages/LoginConta/App"
 import Cadastro from "../src/pages/CriarConta/Cadastro"
+import Erro from "./components/Erro/Erro"
 
 function DashboardLayout({ children }) {
   return (
@@ -28,6 +29,8 @@ function AppRoutes() {
         <Route path="/adm" element={<DashboardLayout><AdminPage /></DashboardLayout>} />
         <Route path="/perfilconta" element={<DashboardLayout><PerfilConta /></DashboardLayout>} />
         <Route path="/cadastro" element={<Cadastro/>}/>
+        <Route path="/erro" element={<Erro />} />
+        <Route path="*" element={<Erro />} />
 
       </Routes>
     </BrowserRouter>
