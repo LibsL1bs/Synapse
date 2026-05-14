@@ -6,7 +6,7 @@ function Sidebar() {
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const userId = localStorage.getItem("userId");
+        const userId = sessionStorage.getItem("user_id");
         if (!userId) return;
 
         api.get(`/users/${userId}/role`)
