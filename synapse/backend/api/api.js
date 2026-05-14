@@ -11,7 +11,11 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const API_URL = process.env.API_URL || 'http://127.0.0.1';
+<<<<<<< HEAD
 const PORT = process.env.PORT || 300;
+=======
+const PORT = process.env.PORT || 3000;
+>>>>>>> e5bda178418e1d6922cfcff1d9669a635fc2203a
 
 
 const app = express();
