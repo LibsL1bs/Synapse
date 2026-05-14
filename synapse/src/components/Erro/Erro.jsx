@@ -2,7 +2,7 @@ import React from 'react';
 
 const Erro = () => {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white flex items-center justify-center px-4 py-10">
+    <main className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-800 text-white flex items-center justify-center px-4 py-10">
       <div className="max-w-3xl w-full rounded-3xl border border-white/10 bg-slate-950/80 p-10 shadow-2xl shadow-slate-950/40 backdrop-blur-xl">
         <div className="flex flex-col items-center text-center gap-6">
           <span className="text-6xl font-black tracking-tight text-rose-400">404</span>
