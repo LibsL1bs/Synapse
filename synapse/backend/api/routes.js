@@ -63,6 +63,7 @@ routes.get("/users", async (req, res) => {
 //---------------------------------------------------------------------------------------------------
 
 routes.get("/users/:id", async (req, res) => {
+
   try {
     const { id } = req.params;
     const rows = await sql`SELECT id_user, nome, email, role_user, ativo FROM users WHERE id_user = ${id}`;
@@ -79,6 +80,10 @@ routes.get("/users/:id", async (req, res) => {
 //---------------------------------------------------------------------------------------------------
 
 routes.post("/users", async (req, res) => {
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ const senhaRegex = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
+
   try {
     const nome = String(req.body?.nome ?? "").trim();
     const email = String(req.body?.email ?? "").trim().toLowerCase();
@@ -99,12 +104,15 @@ routes.post("/users", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: "Erro interno do servidor" });
   }
-}); 
+});
 
 
 //---------------------------------------------------------------------------------------------------
 
 routes.put("/users/:id", async (req, res) => {
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const senhaRegex = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
   try {
     const { id } = req.params;
     const nome = String(req.body?.nome ?? "").trim();
@@ -158,6 +166,8 @@ routes.delete("/users/:id", async (req, res) => {
 //===================================================================================================
 
 routes.post("/auth/login", async (req, res) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const senhaRegex = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
   try {
     const email = String(req.body?.email ?? "").trim().toLowerCase();
     const password = String(req.body?.password ?? "").trim();
@@ -192,10 +202,12 @@ routes.post("/auth/login", async (req, res) => {
   }
 });
 
-    
+
 //---------------------------------------------------------------------------------------------------
 
 routes.post("/auth/register", async (req, res) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ const senhaRegex = /^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/;
   try {
     const nome = String(req.body?.nome ?? "").trim();
     const email = String(req.body?.email ?? "").trim().toLowerCase();
@@ -321,7 +333,7 @@ routes.put("/memorias/estado/:id_memoria", async (req, res) => {
   } catch (error) {
     console.error("[MEMORIAS][PUT][500] erro interno:", error);
     return res.status(500).json({ error: "Erro interno do servidor" });
-  } 
+  }
 });
 
 
