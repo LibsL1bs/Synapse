@@ -108,16 +108,16 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="w-full h-full bg-slate-950 p-4">
-      <header className="mb-6 flex items-center justify-between rounded-2xl bg-slate-900 px-5 py-4 shadow-sm shadow-slate-950/20">
+    <div className="w-full min-h-screen bg-slate-950 p-3 sm:p-4 md:p-5">
+      <header className="mb-6 flex flex-col gap-3 rounded-2xl bg-slate-900 px-4 py-4 shadow-sm shadow-slate-950/20 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
           <p className="text-xs uppercase tracking-widest text-slate-400">Painel</p>
-          <h1 className="text-2xl font-semibold text-slate-50">Estado Atual</h1>
+          <h1 className="text-xl font-semibold text-slate-50 sm:text-2xl">Estado Atual</h1>
         </div>
         <button
           onClick={salvar}
           disabled={salvando || !idMemoria}
-          className="bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+          className="w-full rounded-lg bg-slate-700 px-4 py-2 text-xs font-semibold text-slate-100 transition-colors hover:bg-slate-600 disabled:opacity-50 sm:w-auto"
         >
           {salvando ? "Salvando..." : "Salvar"}
         </button>
@@ -127,7 +127,7 @@ export default function Dashboard() {
       {erro && <div className="text-red-500">{erro}</div>}
 
       {dados && (
-        <div className="grid grid-cols-[1.6fr_1fr] gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col gap-4">
             <Tendencias squat={dados.levantamentos.squat} bp={dados.levantamentos.bp} dl={dados.levantamentos.dl} />
             <Fadiga valor={100 - dados.disposicao_relativa} />

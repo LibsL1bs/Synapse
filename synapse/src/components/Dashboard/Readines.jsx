@@ -26,7 +26,7 @@ function Readines({valor = 0}) {
     const valor_normalizado = Math.min(Math.max(valor, 0), 100);
 
     return (
-        <div className="w-full max-w-65 p-2">
+        <div className="mx-auto w-full max-w-xs p-2 sm:max-w-sm">
             <svg
                 viewBox={`0 0 ${size} ${size}`}
                 className="w-full h-auto"

@@ -34,9 +34,9 @@ function Modal({ isOpen, onClose, usuario, onSave }) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0b1220] p-6 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.9)]">
-        <h2 className="mb-4 text-xl font-semibold text-white">Editar Usuário</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4">
+      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1220] p-4 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.9)] sm:p-6">
+        <h2 className="mb-4 text-lg font-semibold text-white sm:text-xl">Editar Usuário</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="nome" className="block text-sm font-medium text-slate-400">
@@ -82,7 +82,7 @@ function Modal({ isOpen, onClose, usuario, onSave }) {
               <option value="inativo">Inativo</option>
             </select>
           </div>
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col gap-3 pt-4 sm:flex-row">
             <button
               type="button"
               onClick={onClose}
